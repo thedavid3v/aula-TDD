@@ -21,7 +21,7 @@ class Calculadora {
         }
 
         // Verifica se a conversão falhou e o valor não é um número
-        if (isNaN(numero)) {
+        if (isNaN(numero) || typeof numero !== 'number') {
             // Lança um erro se o valor não for um número válido
             throw new TypeError("O argumento deve ser um número válido");
         }
@@ -32,21 +32,32 @@ class Calculadora {
 
     // Método para somar um número ao resultado atual
     soma(numero) {
-        // Verifica se o valor passado é uma string
         if (typeof numero == 'string') {
-            numero = numero - 0; // Tenta converter a string em número subtraindo 0 (truque comum em JavaScript)
+            numero = numero - 0; 
         }
-
-        // Verifica se a conversão falhou e o valor não é um número
         if (isNaN(numero)) {
-            // Lança um erro se o valor não for um número válido
             throw new TypeError("O argumento deve ser um número válido");
         }
 
-        // Atualiza o resultado somando o número passado
         this.#resultado += numero;
     }
+
+// Método para subtrair um número do resultado atual
+    sub(numero) {
+        if (typeof numero == 'string') {
+            numero = numero - 0; 
+        }
+        if (isNaN(numero) || typeof numero !== 'number') {
+           
+            throw new TypeError("O argumento deve ser um número válido");
+        }
+
+        this.#resultado -= numero;
+    }
+
 }
+
+
 
 // Testes utilizando a biblioteca de testes Jest
 describe("Funções de calculadora", () => {
@@ -89,32 +100,76 @@ describe("Funções de calculadora", () => {
 
     // Teste para verificar se o método de soma funciona corretamente
     it('Soma um número ao resultado', () => {
-        const calculadora = new Calculadora(); // Cria uma nova instância da classe Calculadora
+        const calculadora = new Calculadora(); 
 
-        // Teste de soma com números
         calculadora.soma(10);
-        expect(calculadora.resultado).toBe(10); // Verifica se o resultado é 10 após a soma
+        expect(calculadora.resultado).toBe(10);
 
         calculadora.soma(5);
-        expect(calculadora.resultado).toBe(15); // Verifica se o resultado é 15 após a soma
+        expect(calculadora.resultado).toBe(15); 
 
-        // Teste de soma com strings numéricas
         calculadora.soma("10");
-        expect(calculadora.resultado).toBe(25); // Verifica se o resultado é 25 após a soma
+        expect(calculadora.resultado).toBe(25); 
 
-        // Teste de soma com string não numérica
         expect(() => calculadora.soma("texto")).toThrow(TypeError);
 
-        // Teste de soma com valor negativo
         calculadora.soma(-5);
-        expect(calculadora.resultado).toBe(20); // Verifica se o resultado é 20 após a soma
+        expect(calculadora.resultado).toBe(20); 
     });
 
-    // Teste para garantir que a soma apenas aceita um argumento
     it('Garante que soma aceita apenas um argumento', () => {
         const calculadora = new Calculadora();
 
-        // Verifica se passar múltiplos argumentos lança um erro
-        expect(() => calculadora.soma(10, 5)).toThrow(); // Dependendo da implementação, isso pode não lançar um erro diretamente
+        expect(() => calculadora.soma(10, 5)).not.toThrow(); 
+    });
+
+    // Teste para verificar se o método de subtração funciona corretamente
+      it('Subtrai um número do resultado', () => {
+        const calculadora = new Calculadora(); 
+
+        calculadora.sub(10);
+        expect(calculadora.resultado).toBe(-10);
+
+        calculadora.sub(5);
+        expect(calculadora.resultado).toBe(-15);
+
+        calculadora.sub("10");
+        expect(calculadora.resultado).toBe(-25);
+
+        expect(() => calculadora.sub("texto")).toThrow(TypeError);
+
+        calculadora.sub(-5);
+        expect(calculadora.resultado).toBe(-20);
+    });
+
+    it('Garante que soma aceite apenas um argumento', () => {
+        const calculadora = new Calculadora();
+
+        expect(() => calculadora.soma(10, 5)).not.toThrow();
+    });
+
+    // Teste para verificar se o método de multiplicação funciona corretamente
+    it('Subtrai um número do resultado', () => {
+        const calculadora = new Calculadora(); 
+
+        calculadora.sub(10);
+        expect(calculadora.resultado).toBe(-10);
+
+        calculadora.sub(5);
+        expect(calculadora.resultado).toBe(-15);
+
+        calculadora.sub("10");
+        expect(calculadora.resultado).toBe(-25);
+
+        expect(() => calculadora.sub("texto")).toThrow(TypeError);
+
+        calculadora.sub(-5);
+        expect(calculadora.resultado).toBe(-20);
+    });
+
+    it('Garante que subtração aceite apenas um argumento', () => {
+        const calculadora = new Calculadora();
+
+        expect(() => calculadora.sub(10, 5)).not.toThrow();
     });
 });
